@@ -1,12 +1,15 @@
 package br.com.alessanderleite.soundfxdemo;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class SoundFXDemoActivity extends Activity {
+public class SoundFXDemoActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sound_fx_demo);
+
     }
 }
