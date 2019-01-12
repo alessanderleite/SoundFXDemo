@@ -2,7 +2,9 @@ package br.com.alessanderleite.soundfxdemo;
 
 import android.content.Intent;
 import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,17 +31,47 @@ public class SoundFXDemoActivity extends AppCompatActivity implements View.OnCli
         Button button_coinsound = (Button) findViewById(R.id.button_coinsound);
         button_coinsound.setOnClickListener(this);
 
-        attributesBuilder = new AudioAttributes.Builder();
-        attributesBuilder.setUsage(AudioAttributes.USAGE_ALARM);
-        attributesBuilder.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
-        attributes = attributesBuilder.build();
+        createSoundPool();
+        loadSounds();
+    }
 
-        soundPoolBuilder = new SoundPool.Builder();
-        soundPoolBuilder.setAudioAttributes(attributes);
-        soundPool = soundPoolBuilder.build();
+    protected void loadSounds() {
 
         soundID_coin = soundPool.load(this, R.raw.gamecoin,1);
 
+    }
+
+    protected void createSoundPool() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            attributesBuilder = new AudioAttributes.Builder();
+            attributesBuilder.setUsage(AudioAttributes.USAGE_ALARM);
+            attributesBuilder.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
+            attributes = attributesBuilder.build();
+
+            soundPoolBuilder = new SoundPool.Builder();
+            soundPoolBuilder.setAudioAttributes(attributes);
+            soundPool = soundPoolBuilder.build();
+
+        } else {
+
+            soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        soundPool.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createSoundPool();
+        loadSounds();
     }
 
     @Override
@@ -50,12 +82,5 @@ public class SoundFXDemoActivity extends AppCompatActivity implements View.OnCli
             case R.id.button_coinsound:
                 soundPool.play(soundID_coin,1,1,0,0,1);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        soundPool.release();
     }
 }
