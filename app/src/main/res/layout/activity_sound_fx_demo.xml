@@ -12,11 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_above="@+id/button_myfirstbutton_m2"
+        android:layout_above="@+id/button_lowsound"
         android:text="COIN UP" />
 
     <Button
-        android:id="@+id/button_myfirstbutton_m2"
+        android:id="@+id/button_lowsound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
