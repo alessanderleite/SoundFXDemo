@@ -1,6 +1,5 @@
 package br.com.alessanderleite.soundfxdemo;
 
-import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -20,19 +19,34 @@ public class SoundFXDemoActivity extends AppCompatActivity implements View.OnCli
 
     int soundID_coin;
 
+    AudioManager audioManager;
+    float curVolume, maxVolume, volume;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_fx_demo);
 
-        Button myfirstbutton_m2 = (Button) findViewById(R.id.button_myfirstbutton_m2);
-        myfirstbutton_m2.setOnClickListener(this);
-
         Button button_coinsound = (Button) findViewById(R.id.button_coinsound);
         button_coinsound.setOnClickListener(this);
 
+        Button myfirstbutton_m2 = (Button) findViewById(R.id.button_lowsound);
+        myfirstbutton_m2.setOnClickListener(this);
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
         createSoundPool();
         loadSounds();
+        volumeSounds();
+    }
+
+    protected void volumeSounds() {
+
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        curVolume = (float)audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVolume = (float)audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        volume = curVolume / maxVolume;
     }
 
     protected void loadSounds() {
@@ -81,6 +95,12 @@ public class SoundFXDemoActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.button_coinsound:
                 soundPool.play(soundID_coin,1,1,0,0,1);
+                break;
+
+            case R.id.button_lowsound:
+                soundPool.play(soundID_coin, volume/8, volume/8,0,0,1);
+                break;
+
         }
     }
 }
